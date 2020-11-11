@@ -7,7 +7,8 @@ const output = document.querySelector('p');
 
 button.addEventListener('click', trackUserHandler);
 
-
+////// Commenting out to redo in a better way ///////
+/////////////////////////////////////////////////////
 // let result = 0;
 // for (let i = 0; i < 100000000; i++) {
 //   result += i;
@@ -27,13 +28,14 @@ button.addEventListener('click', trackUserHandler);
 //   );
 //   console.log("Getting the position...")
 // }
+/////////////////////////////////////////////////////
 
 // CALLBACK HELL :D
 // avoided by PROMISES
 // lets see how to "promisify"
 
 const getPosition = (opts) => {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(success => {
                 resolve(success);
             }, error => {
@@ -54,15 +56,18 @@ const setTimer = duration => {
 }
 
 function trackUserHandler() {
-    navigator.geolocation.getCurrentPosition(
-        posData => {
-            setTimer(2000).then(data => {
-                console.log(data, posData);
-            });
-        },
-        errData => {
-            console.log(errData)
-        }
-    );
+    let positionData;
+    getPosition()
+        .then(posData => {
+            positionData = posData;
+            return setTimer(2000);
+        })
+        .then(data => {
+            console.log(data);
+            console.log(positionData);
+        });
+    setTimer(6000).then(() => {
+        console.log("--timer done--");
+    })
     console.log("Getting the position...")
 }
