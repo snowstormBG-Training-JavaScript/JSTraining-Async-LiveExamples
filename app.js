@@ -39,7 +39,7 @@ const getPosition = (opts) => {
         navigator.geolocation.getCurrentPosition(success => {
                 resolve(success);
             }, error => {
-
+                reject(error);
             }, opts
         );
     });
@@ -62,6 +62,11 @@ function trackUserHandler() {
             positionData = posData;
             return setTimer(2000);
         })
+        .catch(err => {
+            console.log(err);
+            return "on we go...";  // <- this does not cancel the promise. It allows it to continue.
+        })          // important: the position of the .catch block matters.
+                    // If we use RETURN, any .then blocks after it will be run. We can place .catch at the end of the chain.
         .then(data => {
             console.log(data);
             console.log(positionData);
